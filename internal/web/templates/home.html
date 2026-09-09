@@ -1,0 +1,61 @@
+{{define "content"}}
+<section class="hero">
+  <a class="btn btn-primary btn-big" href="/start">Start a session</a>
+</section>
+
+<section class="card">
+  <h2>This week</h2>
+  <p class="stat">{{.ThisWeek.Total}} <span class="muted">session{{if ne .ThisWeek.Total 1}}s{{end}} since Monday</span></p>
+  <div class="weeks" aria-label="Sessions per week, last 8 weeks">
+    {{range .Weeks}}
+    <div class="week">
+      <div class="bar-wrap"><div class="bar" style="height:{{pct .Total $.MaxWeek}}%"></div></div>
+      <div class="count">{{.Total}}</div>
+      <div class="label">{{.Start.Format "2 Jan"}}</div>
+    </div>
+    {{end}}
+  </div>
+  <p class="muted small">Walks, rides and workouts all count. Showing up is the number that matters first.</p>
+</section>
+
+{{if .Unrated}}
+<section class="card">
+  <h2>Not yet rated</h2>
+  <ul class="list">
+    {{range .Unrated}}
+    <li><a href="/session/{{.ID}}/rate">
+      <span>{{.ProtocolName}} <span class="muted">{{day .StartedAt}}</span></span>
+      <span class="chip">rate</span>
+    </a></li>
+    {{end}}
+  </ul>
+</section>
+{{end}}
+
+<section class="card">
+  <h2>Workouts</h2>
+  <ul class="list">
+    {{range .Workouts}}
+    <li><a href="/play/{{.ID}}">
+      <span>{{.Name}} <span class="muted">~{{.Minutes}} min</span></span>
+      <span class="chip">{{if .Last}}{{day .Last}}{{else}}new{{end}}</span>
+    </a></li>
+    {{end}}
+  </ul>
+</section>
+
+{{if .Recent}}
+<section class="card">
+  <h2>Recent</h2>
+  <ul class="list">
+    {{range .Recent}}
+    <li><a href="/session/{{.ID}}">
+      <span>{{.ProtocolName}} <span class="muted">{{day .StartedAt}}</span></span>
+      <span class="muted">{{.Result}}{{if .Effort}} · effort {{deref .Effort}}{{end}}</span>
+    </a></li>
+    {{end}}
+  </ul>
+  <p><a href="/sessions">All history</a></p>
+</section>
+{{end}}
+{{end}}

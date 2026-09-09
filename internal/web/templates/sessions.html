@@ -1,0 +1,12 @@
+{{define "content"}}
+<h1>History</h1>
+{{if not .Sessions}}<p class="muted">Nothing logged yet. <a href="/start">Start a session</a> or import a walk.</p>{{end}}
+<ul class="list">
+  {{range .Sessions}}
+  <li><a href="/session/{{.ID}}">
+    <span>{{.ProtocolName}} <span class="muted">{{day .StartedAt}}</span>{{if .Scaled}} <span class="chip warn">scaled</span>{{end}}{{if not .Completed}} <span class="chip warn">stopped early</span>{{end}}</span>
+    <span class="muted">{{.Result}}{{if .Effort}} · effort {{deref .Effort}}{{else}} · unrated{{end}}</span>
+  </a></li>
+  {{end}}
+</ul>
+{{end}}

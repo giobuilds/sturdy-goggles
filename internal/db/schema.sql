@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS protocols (
     mode        TEXT CHECK (mode IN ('walk','ride','run')),   -- route only
     name        TEXT NOT NULL UNIQUE,
     notes       TEXT NOT NULL DEFAULT '',
+    rounds      INTEGER NOT NULL DEFAULT 1,     -- workout only: circuit rounds
+    starter     INTEGER NOT NULL DEFAULT 0,     -- shipped with the app
     archived    INTEGER NOT NULL DEFAULT 0,
     created_at  TEXT NOT NULL
 );
@@ -25,9 +27,11 @@ CREATE TABLE IF NOT EXISTS workout_items (
     protocol_id  INTEGER NOT NULL REFERENCES protocols(id),
     position     INTEGER NOT NULL,
     exercise_id  INTEGER REFERENCES exercises(id),
-    label        TEXT NOT NULL,          -- free text when exercise_id is null
-    target_reps  INTEGER,
+    label        TEXT NOT NULL,          -- display text; may add cues to the exercise name
+    target_reps  INTEGER,                -- exactly one of target_reps / target_secs
     target_secs  INTEGER,
+    rest_secs    INTEGER NOT NULL DEFAULT 0,
+    load_kg      REAL,                   -- dumbbell/band work; per hand
     UNIQUE (protocol_id, position)
 );
 
@@ -109,14 +113,17 @@ CREATE TABLE IF NOT EXISTS workout_results (
     rounds       INTEGER
 );
 
--- Per-exercise actuals for a workout session.
+-- Per-exercise actuals for a workout session, one row per round × item.
 CREATE TABLE IF NOT EXISTS session_exercises (
     id            INTEGER PRIMARY KEY,
     session_id    INTEGER NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
-    block         INTEGER NOT NULL DEFAULT 1,
+    round         INTEGER NOT NULL DEFAULT 1,
     position      INTEGER NOT NULL,
-    exercise_id   INTEGER NOT NULL REFERENCES exercises(id),
+    exercise_id   INTEGER REFERENCES exercises(id),
+    label         TEXT NOT NULL,
+    unit          TEXT NOT NULL CHECK (unit IN ('reps','secs')),
     target_value  INTEGER,
     actual_value  INTEGER,
-    UNIQUE (session_id, block, position)
+    load_kg       REAL,
+    UNIQUE (session_id, round, position)
 );

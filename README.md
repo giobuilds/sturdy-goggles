@@ -4,7 +4,7 @@ A personal training log that answers questions about your own history and propos
 Walks and rides from GPX or FIT files, workouts entered by hand, an exercise library, and (later) an
 adaptive Coach, wearable readiness, and weight-trend targets. Single user, self-hosted, no accounts.
 
-Design: [`docs/fitlog-v3-brief.md`](docs/fitlog-v3-brief.md). Status: stage 1 (core model and CLI).
+Design: [`docs/fitlog-v3-brief.md`](docs/fitlog-v3-brief.md). Status: stage 2 (CLI plus the workout web app).
 
 ## Build
 
@@ -31,6 +31,17 @@ export FITLOG_DATA=./data          # one directory holds the database and every 
 
 Imported files are stored immutably under `FITLOG_DATA`, named by SHA-256. Importing the same file
 twice changes nothing. All numeric metrics are derived from those files and can be recomputed.
+
+## Web app
+
+```
+./fitlog serve                     # http://localhost:8080, set FITLOG_LISTEN to change
+```
+
+Open it on your phone, use "Add to Home Screen", and it installs as an app. The session player works
+with no connection: a finished session is kept on the phone and synced the next time a page loads.
+Five beginner workouts ship with the app (mat, dumbbells, band). There is no login: run it on a
+LAN or over Tailscale only.
 
 ## Configuration
 

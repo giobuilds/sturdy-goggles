@@ -1,49 +1,750 @@
 [
-  {"slug":"bodyweight-squat","name":"Bodyweight squat","discipline":"calisthenics","difficulty":1,"unit":"reps","tags":["muscle:quads","muscle:glutes","avoid:knee"]},
-  {"slug":"glute-bridge","name":"Glute bridge","discipline":"calisthenics","difficulty":1,"unit":"reps","equipment":"mat","tags":["muscle:glutes","muscle:hamstrings"]},
-  {"slug":"incline-push-up","name":"Incline push-up","discipline":"calisthenics","difficulty":1,"unit":"reps","tags":["muscle:chest","muscle:triceps","muscle:core","avoid:wrist","avoid:shoulder"]},
-  {"slug":"knee-push-up","name":"Knee push-up","discipline":"calisthenics","difficulty":1,"unit":"reps","equipment":"mat","tags":["muscle:chest","muscle:triceps","muscle:core","avoid:wrist","avoid:shoulder"]},
-  {"slug":"push-up","name":"Push-up","discipline":"calisthenics","difficulty":2,"unit":"reps","regression_of":"knee-push-up","tags":["muscle:chest","muscle:triceps","muscle:core","avoid:wrist","avoid:shoulder"],"notes":"regression_of here means: knee push-up is the regression of this exercise"},
-  {"slug":"diamond-push-up","name":"Diamond push-up","discipline":"calisthenics","difficulty":3,"unit":"reps","regression_of":"push-up","tags":["muscle:triceps","muscle:chest","muscle:core","avoid:wrist","avoid:elbow","avoid:shoulder"]},
-  {"slug":"pike-push-up","name":"Pike push-up","discipline":"calisthenics","difficulty":3,"unit":"reps","regression_of":"push-up","tags":["muscle:shoulders","muscle:triceps","avoid:wrist","avoid:shoulder","avoid:neck"]},
-  {"slug":"reverse-lunge","name":"Reverse lunge","discipline":"calisthenics","difficulty":2,"unit":"reps","regression_of":"bodyweight-squat","tags":["muscle:quads","muscle:glutes","avoid:knee","balance"]},
-  {"slug":"forward-lunge","name":"Forward lunge","discipline":"calisthenics","difficulty":2,"unit":"reps","regression_of":"reverse-lunge","tags":["muscle:quads","muscle:glutes","avoid:knee","balance"]},
-  {"slug":"jump-squat","name":"Jump squat","discipline":"hiit","difficulty":3,"unit":"reps","regression_of":"bodyweight-squat","tags":["muscle:quads","muscle:glutes","avoid:knee","avoid:ankle","impact:high"]},
-  {"slug":"dead-hang","name":"Dead hang","discipline":"calisthenics","difficulty":1,"unit":"secs","equipment":"bar","tags":["muscle:grip","muscle:lats","avoid:shoulder"]},
-  {"slug":"inverted-row","name":"Inverted row","discipline":"calisthenics","difficulty":2,"unit":"reps","equipment":"bar","tags":["muscle:lats","muscle:biceps","muscle:upper-back","avoid:shoulder","avoid:elbow"]},
-  {"slug":"negative-pull-up","name":"Negative pull-up","discipline":"calisthenics","difficulty":3,"unit":"reps","equipment":"bar","regression_of":"inverted-row","tags":["muscle:lats","muscle:biceps","avoid:shoulder","avoid:elbow"]},
-  {"slug":"pull-up","name":"Pull-up","discipline":"calisthenics","difficulty":4,"unit":"reps","equipment":"bar","regression_of":"negative-pull-up","tags":["muscle:lats","muscle:biceps","muscle:core","avoid:shoulder","avoid:elbow"]},
-  {"slug":"hanging-knee-raise","name":"Hanging knee raise","discipline":"calisthenics","difficulty":3,"unit":"reps","equipment":"bar","tags":["muscle:core","muscle:hip-flexors","muscle:grip","avoid:shoulder"]},
-  {"slug":"plank","name":"Plank","discipline":"calisthenics","difficulty":1,"unit":"secs","equipment":"mat","tags":["muscle:core","muscle:shoulders","avoid:wrist","avoid:shoulder"]},
-  {"slug":"side-plank","name":"Side plank","discipline":"calisthenics","difficulty":2,"unit":"secs","equipment":"mat","regression_of":"plank","tags":["muscle:core","muscle:obliques","avoid:wrist","avoid:shoulder"]},
-  {"slug":"hollow-hold","name":"Hollow hold","discipline":"calisthenics","difficulty":2,"unit":"secs","equipment":"mat","tags":["muscle:core","avoid:lumbar","avoid:neck"]},
-  {"slug":"dead-bug","name":"Dead bug","discipline":"mobility","difficulty":1,"unit":"reps","equipment":"mat","tags":["muscle:core","stability"]},
-
-  {"slug":"jumping-jacks","name":"Jumping jacks","discipline":"hiit","difficulty":1,"unit":"secs","tags":["cardio","impact:medium","avoid:ankle"]},
-  {"slug":"high-knees","name":"High knees","discipline":"hiit","difficulty":1,"unit":"secs","tags":["cardio","muscle:hip-flexors","impact:medium","avoid:knee"]},
-  {"slug":"mountain-climber","name":"Mountain climber","discipline":"hiit","difficulty":2,"unit":"secs","equipment":"mat","tags":["cardio","muscle:core","muscle:shoulders","avoid:wrist"]},
-  {"slug":"squat-thrust","name":"Squat thrust","discipline":"hiit","difficulty":2,"unit":"reps","tags":["cardio","muscle:quads","muscle:core","avoid:wrist","impact:medium"]},
-  {"slug":"burpee","name":"Burpee","discipline":"hiit","difficulty":3,"unit":"reps","regression_of":"squat-thrust","tags":["cardio","muscle:full-body","avoid:wrist","avoid:knee","impact:high"]},
-  {"slug":"skater","name":"Skater","discipline":"hiit","difficulty":2,"unit":"reps","tags":["cardio","muscle:glutes","balance","avoid:knee","avoid:ankle","impact:medium"]},
-
-  {"slug":"pilates-hundred","name":"The hundred","discipline":"pilates","difficulty":2,"unit":"secs","equipment":"mat","tags":["muscle:core","breathing","avoid:neck","avoid:lumbar"]},
-  {"slug":"roll-like-a-ball","name":"Roll like a ball","discipline":"pilates","difficulty":1,"unit":"reps","equipment":"mat","tags":["muscle:core","spine-mobility","avoid:lumbar"]},
-  {"slug":"roll-up","name":"Roll-up","discipline":"pilates","difficulty":2,"unit":"reps","equipment":"mat","regression_of":"roll-like-a-ball","tags":["muscle:core","spine-mobility","avoid:lumbar"]},
-  {"slug":"single-leg-stretch","name":"Single leg stretch","discipline":"pilates","difficulty":2,"unit":"reps","equipment":"mat","tags":["muscle:core","muscle:hip-flexors","avoid:neck"]},
-  {"slug":"double-leg-stretch","name":"Double leg stretch","discipline":"pilates","difficulty":3,"unit":"reps","equipment":"mat","regression_of":"single-leg-stretch","tags":["muscle:core","avoid:neck","avoid:lumbar"]},
-  {"slug":"criss-cross","name":"Criss-cross","discipline":"pilates","difficulty":3,"unit":"reps","equipment":"mat","regression_of":"single-leg-stretch","tags":["muscle:core","muscle:obliques","avoid:neck"]},
-  {"slug":"spine-stretch-forward","name":"Spine stretch forward","discipline":"pilates","difficulty":1,"unit":"reps","equipment":"mat","tags":["spine-mobility","muscle:hamstrings"]},
-  {"slug":"saw","name":"Saw","discipline":"pilates","difficulty":2,"unit":"reps","equipment":"mat","regression_of":"spine-stretch-forward","tags":["spine-mobility","muscle:obliques","muscle:hamstrings"]},
-  {"slug":"single-leg-circles","name":"Single leg circles","discipline":"pilates","difficulty":2,"unit":"reps","equipment":"mat","tags":["muscle:hip-flexors","muscle:core","hip-mobility"]},
-  {"slug":"shoulder-bridge","name":"Shoulder bridge","discipline":"pilates","difficulty":2,"unit":"reps","equipment":"mat","regression_of":"glute-bridge","tags":["muscle:glutes","muscle:hamstrings","spine-mobility"]},
-  {"slug":"side-kick-series","name":"Side kick series","discipline":"pilates","difficulty":2,"unit":"reps","equipment":"mat","tags":["muscle:glutes","muscle:hip-abductors","stability"]},
-  {"slug":"pilates-swimming","name":"Swimming","discipline":"pilates","difficulty":2,"unit":"secs","equipment":"mat","tags":["muscle:back-extensors","muscle:glutes","avoid:lumbar"]},
-  {"slug":"swan","name":"Swan","discipline":"pilates","difficulty":3,"unit":"reps","equipment":"mat","tags":["muscle:back-extensors","spine-mobility","avoid:lumbar","avoid:wrist"]},
-  {"slug":"teaser","name":"Teaser","discipline":"pilates","difficulty":4,"unit":"reps","equipment":"mat","regression_of":"roll-up","tags":["muscle:core","muscle:hip-flexors","balance","avoid:lumbar"]},
-
-  {"slug":"cat-cow","name":"Cat-cow","discipline":"mobility","difficulty":1,"unit":"reps","equipment":"mat","tags":["spine-mobility","avoid:wrist"]},
-  {"slug":"worlds-greatest-stretch","name":"World's greatest stretch","discipline":"mobility","difficulty":1,"unit":"reps","tags":["hip-mobility","thoracic-mobility","muscle:hamstrings"]},
-  {"slug":"hip-flexor-stretch","name":"Half-kneeling hip flexor stretch","discipline":"mobility","difficulty":1,"unit":"secs","equipment":"mat","tags":["hip-mobility","muscle:hip-flexors","avoid:knee"]},
-  {"slug":"deep-squat-hold","name":"Deep squat hold","discipline":"mobility","difficulty":1,"unit":"secs","tags":["hip-mobility","ankle-mobility","avoid:knee"]},
-  {"slug":"thoracic-rotation","name":"Thoracic rotation","discipline":"mobility","difficulty":1,"unit":"reps","equipment":"mat","tags":["thoracic-mobility","spine-mobility"]}
+ {
+  "slug": "bodyweight-squat",
+  "name": "Bodyweight squat",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "reps",
+  "tags": [
+   "muscle:quads",
+   "muscle:glutes",
+   "avoid:knee"
+  ]
+ },
+ {
+  "slug": "glute-bridge",
+  "name": "Glute bridge",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:glutes",
+   "muscle:hamstrings"
+  ]
+ },
+ {
+  "slug": "incline-push-up",
+  "name": "Incline push-up",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "reps",
+  "tags": [
+   "muscle:chest",
+   "muscle:triceps",
+   "muscle:core",
+   "avoid:wrist",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "knee-push-up",
+  "name": "Knee push-up",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:chest",
+   "muscle:triceps",
+   "muscle:core",
+   "avoid:wrist",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "push-up",
+  "name": "Push-up",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "regression_of": "knee-push-up",
+  "tags": [
+   "muscle:chest",
+   "muscle:triceps",
+   "muscle:core",
+   "avoid:wrist",
+   "avoid:shoulder"
+  ],
+  "notes": "regression_of here means: knee push-up is the regression of this exercise"
+ },
+ {
+  "slug": "diamond-push-up",
+  "name": "Diamond push-up",
+  "discipline": "calisthenics",
+  "difficulty": 3,
+  "unit": "reps",
+  "regression_of": "push-up",
+  "tags": [
+   "muscle:triceps",
+   "muscle:chest",
+   "muscle:core",
+   "avoid:wrist",
+   "avoid:elbow",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "pike-push-up",
+  "name": "Pike push-up",
+  "discipline": "calisthenics",
+  "difficulty": 3,
+  "unit": "reps",
+  "regression_of": "push-up",
+  "tags": [
+   "muscle:shoulders",
+   "muscle:triceps",
+   "avoid:wrist",
+   "avoid:shoulder",
+   "avoid:neck"
+  ]
+ },
+ {
+  "slug": "reverse-lunge",
+  "name": "Reverse lunge",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "regression_of": "bodyweight-squat",
+  "tags": [
+   "muscle:quads",
+   "muscle:glutes",
+   "avoid:knee",
+   "balance"
+  ]
+ },
+ {
+  "slug": "forward-lunge",
+  "name": "Forward lunge",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "regression_of": "reverse-lunge",
+  "tags": [
+   "muscle:quads",
+   "muscle:glutes",
+   "avoid:knee",
+   "balance"
+  ]
+ },
+ {
+  "slug": "jump-squat",
+  "name": "Jump squat",
+  "discipline": "hiit",
+  "difficulty": 3,
+  "unit": "reps",
+  "regression_of": "bodyweight-squat",
+  "tags": [
+   "muscle:quads",
+   "muscle:glutes",
+   "avoid:knee",
+   "avoid:ankle",
+   "impact:high"
+  ]
+ },
+ {
+  "slug": "dead-hang",
+  "name": "Dead hang",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "secs",
+  "equipment": "bar",
+  "tags": [
+   "muscle:grip",
+   "muscle:lats",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "inverted-row",
+  "name": "Inverted row",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "bar",
+  "tags": [
+   "muscle:lats",
+   "muscle:biceps",
+   "muscle:upper-back",
+   "avoid:shoulder",
+   "avoid:elbow"
+  ]
+ },
+ {
+  "slug": "negative-pull-up",
+  "name": "Negative pull-up",
+  "discipline": "calisthenics",
+  "difficulty": 3,
+  "unit": "reps",
+  "equipment": "bar",
+  "regression_of": "inverted-row",
+  "tags": [
+   "muscle:lats",
+   "muscle:biceps",
+   "avoid:shoulder",
+   "avoid:elbow"
+  ]
+ },
+ {
+  "slug": "pull-up",
+  "name": "Pull-up",
+  "discipline": "calisthenics",
+  "difficulty": 4,
+  "unit": "reps",
+  "equipment": "bar",
+  "regression_of": "negative-pull-up",
+  "tags": [
+   "muscle:lats",
+   "muscle:biceps",
+   "muscle:core",
+   "avoid:shoulder",
+   "avoid:elbow"
+  ]
+ },
+ {
+  "slug": "hanging-knee-raise",
+  "name": "Hanging knee raise",
+  "discipline": "calisthenics",
+  "difficulty": 3,
+  "unit": "reps",
+  "equipment": "bar",
+  "tags": [
+   "muscle:core",
+   "muscle:hip-flexors",
+   "muscle:grip",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "plank",
+  "name": "Plank",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "secs",
+  "equipment": "mat",
+  "tags": [
+   "muscle:core",
+   "muscle:shoulders",
+   "avoid:wrist",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "side-plank",
+  "name": "Side plank",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "secs",
+  "equipment": "mat",
+  "regression_of": "plank",
+  "tags": [
+   "muscle:core",
+   "muscle:obliques",
+   "avoid:wrist",
+   "avoid:shoulder"
+  ]
+ },
+ {
+  "slug": "hollow-hold",
+  "name": "Hollow hold",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "secs",
+  "equipment": "mat",
+  "tags": [
+   "muscle:core",
+   "avoid:lumbar",
+   "avoid:neck"
+  ]
+ },
+ {
+  "slug": "dead-bug",
+  "name": "Dead bug",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:core",
+   "stability"
+  ]
+ },
+ {
+  "slug": "jumping-jacks",
+  "name": "Jumping jacks",
+  "discipline": "hiit",
+  "difficulty": 1,
+  "unit": "secs",
+  "tags": [
+   "cardio",
+   "impact:medium",
+   "avoid:ankle"
+  ]
+ },
+ {
+  "slug": "high-knees",
+  "name": "High knees",
+  "discipline": "hiit",
+  "difficulty": 1,
+  "unit": "secs",
+  "tags": [
+   "cardio",
+   "muscle:hip-flexors",
+   "impact:medium",
+   "avoid:knee"
+  ]
+ },
+ {
+  "slug": "mountain-climber",
+  "name": "Mountain climber",
+  "discipline": "hiit",
+  "difficulty": 2,
+  "unit": "secs",
+  "equipment": "mat",
+  "tags": [
+   "cardio",
+   "muscle:core",
+   "muscle:shoulders",
+   "avoid:wrist"
+  ]
+ },
+ {
+  "slug": "squat-thrust",
+  "name": "Squat thrust",
+  "discipline": "hiit",
+  "difficulty": 2,
+  "unit": "reps",
+  "tags": [
+   "cardio",
+   "muscle:quads",
+   "muscle:core",
+   "avoid:wrist",
+   "impact:medium"
+  ]
+ },
+ {
+  "slug": "burpee",
+  "name": "Burpee",
+  "discipline": "hiit",
+  "difficulty": 3,
+  "unit": "reps",
+  "regression_of": "squat-thrust",
+  "tags": [
+   "cardio",
+   "muscle:full-body",
+   "avoid:wrist",
+   "avoid:knee",
+   "impact:high"
+  ]
+ },
+ {
+  "slug": "skater",
+  "name": "Skater",
+  "discipline": "hiit",
+  "difficulty": 2,
+  "unit": "reps",
+  "tags": [
+   "cardio",
+   "muscle:glutes",
+   "balance",
+   "avoid:knee",
+   "avoid:ankle",
+   "impact:medium"
+  ]
+ },
+ {
+  "slug": "pilates-hundred",
+  "name": "The hundred",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "secs",
+  "equipment": "mat",
+  "tags": [
+   "muscle:core",
+   "breathing",
+   "avoid:neck",
+   "avoid:lumbar"
+  ]
+ },
+ {
+  "slug": "roll-like-a-ball",
+  "name": "Roll like a ball",
+  "discipline": "pilates",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:core",
+   "spine-mobility",
+   "avoid:lumbar"
+  ]
+ },
+ {
+  "slug": "roll-up",
+  "name": "Roll-up",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "mat",
+  "regression_of": "roll-like-a-ball",
+  "tags": [
+   "muscle:core",
+   "spine-mobility",
+   "avoid:lumbar"
+  ]
+ },
+ {
+  "slug": "single-leg-stretch",
+  "name": "Single leg stretch",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:core",
+   "muscle:hip-flexors",
+   "avoid:neck"
+  ]
+ },
+ {
+  "slug": "double-leg-stretch",
+  "name": "Double leg stretch",
+  "discipline": "pilates",
+  "difficulty": 3,
+  "unit": "reps",
+  "equipment": "mat",
+  "regression_of": "single-leg-stretch",
+  "tags": [
+   "muscle:core",
+   "avoid:neck",
+   "avoid:lumbar"
+  ]
+ },
+ {
+  "slug": "criss-cross",
+  "name": "Criss-cross",
+  "discipline": "pilates",
+  "difficulty": 3,
+  "unit": "reps",
+  "equipment": "mat",
+  "regression_of": "single-leg-stretch",
+  "tags": [
+   "muscle:core",
+   "muscle:obliques",
+   "avoid:neck"
+  ]
+ },
+ {
+  "slug": "spine-stretch-forward",
+  "name": "Spine stretch forward",
+  "discipline": "pilates",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "spine-mobility",
+   "muscle:hamstrings"
+  ]
+ },
+ {
+  "slug": "saw",
+  "name": "Saw",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "mat",
+  "regression_of": "spine-stretch-forward",
+  "tags": [
+   "spine-mobility",
+   "muscle:obliques",
+   "muscle:hamstrings"
+  ]
+ },
+ {
+  "slug": "single-leg-circles",
+  "name": "Single leg circles",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:hip-flexors",
+   "muscle:core",
+   "hip-mobility"
+  ]
+ },
+ {
+  "slug": "shoulder-bridge",
+  "name": "Shoulder bridge",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "mat",
+  "regression_of": "glute-bridge",
+  "tags": [
+   "muscle:glutes",
+   "muscle:hamstrings",
+   "spine-mobility"
+  ]
+ },
+ {
+  "slug": "side-kick-series",
+  "name": "Side kick series",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:glutes",
+   "muscle:hip-abductors",
+   "stability"
+  ]
+ },
+ {
+  "slug": "pilates-swimming",
+  "name": "Swimming",
+  "discipline": "pilates",
+  "difficulty": 2,
+  "unit": "secs",
+  "equipment": "mat",
+  "tags": [
+   "muscle:back-extensors",
+   "muscle:glutes",
+   "avoid:lumbar"
+  ]
+ },
+ {
+  "slug": "swan",
+  "name": "Swan",
+  "discipline": "pilates",
+  "difficulty": 3,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "muscle:back-extensors",
+   "spine-mobility",
+   "avoid:lumbar",
+   "avoid:wrist"
+  ]
+ },
+ {
+  "slug": "teaser",
+  "name": "Teaser",
+  "discipline": "pilates",
+  "difficulty": 4,
+  "unit": "reps",
+  "equipment": "mat",
+  "regression_of": "roll-up",
+  "tags": [
+   "muscle:core",
+   "muscle:hip-flexors",
+   "balance",
+   "avoid:lumbar"
+  ]
+ },
+ {
+  "slug": "cat-cow",
+  "name": "Cat-cow",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "spine-mobility",
+   "avoid:wrist"
+  ]
+ },
+ {
+  "slug": "worlds-greatest-stretch",
+  "name": "World's greatest stretch",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "reps",
+  "tags": [
+   "hip-mobility",
+   "thoracic-mobility",
+   "muscle:hamstrings"
+  ]
+ },
+ {
+  "slug": "hip-flexor-stretch",
+  "name": "Half-kneeling hip flexor stretch",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "secs",
+  "equipment": "mat",
+  "tags": [
+   "hip-mobility",
+   "muscle:hip-flexors",
+   "avoid:knee"
+  ]
+ },
+ {
+  "slug": "deep-squat-hold",
+  "name": "Deep squat hold",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "secs",
+  "tags": [
+   "hip-mobility",
+   "ankle-mobility",
+   "avoid:knee"
+  ]
+ },
+ {
+  "slug": "thoracic-rotation",
+  "name": "Thoracic rotation",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "mat",
+  "tags": [
+   "thoracic-mobility",
+   "spine-mobility"
+  ]
+ },
+ {
+  "slug": "goblet-squat",
+  "name": "Goblet squat",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "dumbbell",
+  "regression_of": "bodyweight-squat",
+  "tags": [
+   "muscle:quads",
+   "muscle:glutes",
+   "muscle:core",
+   "avoid:knee"
+  ],
+  "notes": "Hold one dumbbell at the chest."
+ },
+ {
+  "slug": "dumbbell-row",
+  "name": "Dumbbell row",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "dumbbell",
+  "tags": [
+   "muscle:lats",
+   "muscle:upper-back",
+   "muscle:biceps",
+   "avoid:lumbar",
+   "avoid:shoulder"
+  ],
+  "notes": "One hand braced on a chair or the knee; count per side."
+ },
+ {
+  "slug": "dumbbell-overhead-press",
+  "name": "Dumbbell overhead press",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "dumbbell",
+  "tags": [
+   "muscle:shoulders",
+   "muscle:triceps",
+   "avoid:shoulder",
+   "avoid:neck"
+  ]
+ },
+ {
+  "slug": "dumbbell-romanian-deadlift",
+  "name": "Dumbbell Romanian deadlift",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "dumbbell",
+  "regression_of": "glute-bridge",
+  "tags": [
+   "muscle:hamstrings",
+   "muscle:glutes",
+   "muscle:back-extensors",
+   "avoid:lumbar"
+  ],
+  "notes": "Hinge at the hips, soft knees, flat back."
+ },
+ {
+  "slug": "dumbbell-floor-press",
+  "name": "Dumbbell floor press",
+  "discipline": "calisthenics",
+  "difficulty": 2,
+  "unit": "reps",
+  "equipment": "dumbbell",
+  "tags": [
+   "muscle:chest",
+   "muscle:triceps",
+   "avoid:shoulder"
+  ],
+  "notes": "Lying on the mat; a push-up alternative that spares the wrists."
+ },
+ {
+  "slug": "band-pull-apart",
+  "name": "Band pull-apart",
+  "discipline": "mobility",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "band",
+  "tags": [
+   "muscle:upper-back",
+   "muscle:rear-shoulders",
+   "posture"
+  ]
+ },
+ {
+  "slug": "band-row",
+  "name": "Band row",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "band",
+  "tags": [
+   "muscle:lats",
+   "muscle:upper-back",
+   "muscle:biceps"
+  ],
+  "notes": "Band around the feet, seated; a row with no bar needed."
+ },
+ {
+  "slug": "band-lateral-walk",
+  "name": "Band lateral walk",
+  "discipline": "calisthenics",
+  "difficulty": 1,
+  "unit": "reps",
+  "equipment": "band",
+  "tags": [
+   "muscle:glutes",
+   "muscle:hip-abductors",
+   "stability",
+   "avoid:knee"
+  ]
+ },
+ {
+  "slug": "marching-in-place",
+  "name": "Marching in place",
+  "discipline": "hiit",
+  "difficulty": 1,
+  "unit": "secs",
+  "tags": [
+   "cardio",
+   "impact:low"
+  ],
+  "notes": "Low-impact alternative to high knees."
+ },
+ {
+  "slug": "step-back-skater",
+  "name": "Step-back skater",
+  "discipline": "hiit",
+  "difficulty": 1,
+  "unit": "reps",
+  "regression_of": "skater",
+  "tags": [
+   "cardio",
+   "muscle:glutes",
+   "balance",
+   "impact:low"
+  ],
+  "notes": "Step, don't jump."
+ }
 ]

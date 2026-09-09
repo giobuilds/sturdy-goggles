@@ -1,0 +1,17 @@
+{{define "content"}}
+<h1>How did it feel?</h1>
+<p class="muted">{{.S.ProtocolName}} · {{day .S.StartedAt}}{{if .S.Result}} · {{.S.Result}}{{end}}</p>
+<form method="post" action="/session/{{.S.ID}}/rate" class="rate">
+  <div class="effort" role="radiogroup" aria-label="Effort">
+    {{range seq 5}}
+    <label class="effort-btn">
+      <input type="radio" name="effort" value="{{.}}" required{{if and $.S.Effort (eq (deref $.S.Effort) .)}} checked{{end}}>
+      <span class="n">{{.}}</span>
+      <span class="w">{{if eq . 1}}easy{{else if eq . 2}}light{{else if eq . 3}}moderate{{else if eq . 4}}hard{{else}}max{{end}}</span>
+    </label>
+    {{end}}
+  </div>
+  <textarea name="note" rows="3" placeholder="Anything worth remembering? (optional)">{{.S.Note}}</textarea>
+  <button class="btn btn-primary btn-big" type="submit">Save</button>
+</form>
+{{end}}

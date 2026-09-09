@@ -12,12 +12,16 @@ import (
 
 type Config struct {
 	DataDir string
+	Listen  string // address for `fitlog serve`
+	TZ      string // IANA name for week boundaries and display; "" = system local
 	Track   track.Params
 }
 
 func Load() (Config, error) {
 	c := Config{
 		DataDir: envOr("FITLOG_DATA", "./data"),
+		Listen:  envOr("FITLOG_LISTEN", ":8080"),
+		TZ:      os.Getenv("FITLOG_TZ"),
 		Track: track.Params{
 			MovingSpeedMPS:   0.5,
 			AscentThresholdM: 3,

@@ -1,0 +1,16 @@
+{{define "content"}}
+<h1>Start a session</h1>
+<ul class="list">
+  {{range .Workouts}}
+  <li class="stack"><a href="/play/{{.ID}}">
+    <span class="row">
+      <strong>{{.Name}}</strong>
+      <span class="chip">~{{.Minutes}} min</span>
+    </span>
+    <span class="muted small">{{len .Items}} exercises · {{.Rounds}} round{{if ne .Rounds 1}}s{{end}}{{if .Last}} · last {{day .Last}}{{end}}</span>
+    {{if .Notes}}<span class="small">{{.Notes}}</span>{{end}}
+  </a></li>
+  {{end}}
+</ul>
+<p class="muted small">Walks and rides are imported from GPX or FIT files with <code>fitlog import</code> for now.</p>
+{{end}}

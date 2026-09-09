@@ -1,0 +1,66 @@
+[
+  {
+    "name": "First session",
+    "notes": "Ten minutes, mat only. The point is to finish it, not to feel worked. Everything here has an easier version if it is too much.",
+    "rounds": 2,
+    "items": [
+      {"exercise": "bodyweight-squat", "reps": 8, "rest": 30},
+      {"exercise": "incline-push-up", "reps": 6, "rest": 30, "label": "Incline push-up (hands on a table or worktop)"},
+      {"exercise": "glute-bridge", "reps": 10, "rest": 30},
+      {"exercise": "dead-bug", "reps": 6, "rest": 30, "label": "Dead bug (6 each side)"},
+      {"exercise": "plank", "secs": 20, "rest": 45}
+    ]
+  },
+  {
+    "name": "Mat basics",
+    "notes": "Fifteen minutes of Pilates fundamentals. Slow, controlled, breathing out on the effort. Stop any move that pinches the lower back.",
+    "rounds": 2,
+    "items": [
+      {"exercise": "cat-cow", "reps": 8, "rest": 0},
+      {"exercise": "roll-like-a-ball", "reps": 6, "rest": 20},
+      {"exercise": "single-leg-stretch", "reps": 8, "rest": 20, "label": "Single leg stretch (8 each side)"},
+      {"exercise": "spine-stretch-forward", "reps": 5, "rest": 20},
+      {"exercise": "shoulder-bridge", "reps": 8, "rest": 20},
+      {"exercise": "side-kick-series", "reps": 8, "rest": 30, "label": "Side kicks (8 each side)"}
+    ]
+  },
+  {
+    "name": "Dumbbell starter",
+    "notes": "Fifteen minutes with the dumbbells and band. Loads are per hand and deliberately light; the last two reps should feel like work, not a fight.",
+    "rounds": 2,
+    "items": [
+      {"exercise": "goblet-squat", "reps": 8, "rest": 40, "load": 5},
+      {"exercise": "dumbbell-row", "reps": 8, "rest": 30, "load": 5, "label": "Dumbbell row (8 each side)"},
+      {"exercise": "dumbbell-floor-press", "reps": 8, "rest": 30, "load": 3.5},
+      {"exercise": "dumbbell-romanian-deadlift", "reps": 8, "rest": 40, "load": 5},
+      {"exercise": "dumbbell-overhead-press", "reps": 6, "rest": 30, "load": 2.5},
+      {"exercise": "band-pull-apart", "reps": 12, "rest": 45}
+    ]
+  },
+  {
+    "name": "Light circuit",
+    "notes": "Ten minutes to get the heart rate up without jumping. Move at a pace you could hold a conversation at.",
+    "rounds": 3,
+    "items": [
+      {"exercise": "marching-in-place", "secs": 30, "rest": 0},
+      {"exercise": "bodyweight-squat", "reps": 10, "rest": 0},
+      {"exercise": "step-back-skater", "reps": 10, "rest": 0, "label": "Step-back skater (10 total)"},
+      {"exercise": "mountain-climber", "secs": 20, "rest": 0, "label": "Slow mountain climbers"},
+      {"exercise": "band-lateral-walk", "reps": 10, "rest": 60, "label": "Band lateral walk (10 each way)"}
+    ]
+  },
+  {
+    "name": "Easy mobility",
+    "notes": "Ten minutes for a stiff day or a rest day. Nothing here should hurt; ease off anything that does.",
+    "rounds": 1,
+    "items": [
+      {"exercise": "cat-cow", "reps": 10, "rest": 0},
+      {"exercise": "worlds-greatest-stretch", "reps": 5, "rest": 0, "label": "World's greatest stretch (5 each side)"},
+      {"exercise": "hip-flexor-stretch", "secs": 30, "rest": 0, "label": "Hip flexor stretch, left"},
+      {"exercise": "hip-flexor-stretch", "secs": 30, "rest": 0, "label": "Hip flexor stretch, right"},
+      {"exercise": "deep-squat-hold", "secs": 30, "rest": 0},
+      {"exercise": "thoracic-rotation", "reps": 8, "rest": 0, "label": "Thoracic rotation (8 each side)"},
+      {"exercise": "band-pull-apart", "reps": 12, "rest": 0}
+    ]
+  }
+]

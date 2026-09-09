@@ -1,0 +1,53 @@
+{{define "content"}}
+<script id="plan" type="application/json">{{.PlanJSON}}</script>
+<div id="player">
+  <section id="intro" class="card">
+    <h1>{{.Protocol.Name}}</h1>
+    <p class="muted">{{.Protocol.Rounds}} round{{if ne .Protocol.Rounds 1}}s{{end}} · about {{.Protocol.Minutes}} min</p>
+    {{if .Protocol.Notes}}<p>{{.Protocol.Notes}}</p>{{end}}
+    <ol class="plan">
+      {{range .Protocol.Items}}
+      <li>{{.Label}} <span class="muted">{{if .TargetSecs}}{{deref .TargetSecs}} s{{else}}{{deref .TargetReps}} reps{{end}}{{if .LoadKg}} · {{kg .LoadKg}}{{end}}</span></li>
+      {{end}}
+    </ol>
+    <button class="btn btn-primary btn-big" id="begin">Begin</button>
+  </section>
+
+  <section id="work" class="card stage" hidden>
+    <p class="muted" id="progress"></p>
+    <h1 id="label"></h1>
+    <p class="target" id="target"></p>
+    <div class="clock" id="clock" hidden>0:00</div>
+    <div class="stepper" id="stepper" hidden>
+      <button class="btn" data-delta="-1" aria-label="one fewer">−</button>
+      <output id="actual">0</output>
+      <button class="btn" data-delta="1" aria-label="one more">+</button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary btn-big" id="primary">Done</button>
+      <button class="btn btn-quiet" id="stop">Stop here</button>
+    </div>
+  </section>
+
+  <section id="rest" class="card stage" hidden>
+    <p class="muted">Rest</p>
+    <div class="clock" id="restclock">0:00</div>
+    <p class="muted" id="next"></p>
+    <div class="actions">
+      <button class="btn btn-primary btn-big" id="skip">Skip rest</button>
+    </div>
+  </section>
+
+  <section id="finish" class="card" hidden>
+    <h1>Finished</h1>
+    <p class="stat" id="total"></p>
+    <ul class="list compact" id="summary"></ul>
+    <label class="check"><input type="checkbox" id="scaled"> I modified the work (fewer reps, easier version)</label>
+    <label class="check"><input type="checkbox" id="incomplete"> I stopped early</label>
+    <div class="actions">
+      <button class="btn btn-primary btn-big" id="save">Save and rate</button>
+    </div>
+    <p class="muted small" id="savestatus"></p>
+  </section>
+</div>
+{{end}}

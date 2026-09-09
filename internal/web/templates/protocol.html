@@ -1,0 +1,32 @@
+{{define "content"}}
+<h1>{{.P.Name}}</h1>
+{{if .P.Notes}}<p>{{.P.Notes}}</p>{{end}}
+{{if eq .P.Kind "workout"}}
+<section class="card">
+  <p class="muted">{{.P.Rounds}} round{{if ne .P.Rounds 1}}s{{end}} · about {{.P.Minutes}} min</p>
+  <ol class="plan">
+    {{range .P.Items}}
+    <li>{{.Label}} <span class="muted">{{if .TargetSecs}}{{deref .TargetSecs}} s{{else}}{{deref .TargetReps}} reps{{end}}{{if .LoadKg}} · {{kg .LoadKg}}{{end}}{{if .RestSecs}} · rest {{.RestSecs}} s{{end}}</span></li>
+    {{end}}
+  </ol>
+  <a class="btn btn-primary btn-big" href="/play/{{.P.ID}}">Start</a>
+</section>
+{{end}}
+
+<section class="card">
+  <h2>History</h2>
+  {{if .Stats.Comparable}}
+  <p class="muted">{{.Stats.Comparable}} comparable session{{if ne .Stats.Comparable 1}}s{{end}} · median {{hms .Stats.MedianSecs}} · best {{hms .Stats.BestSecs}}</p>
+  {{else}}
+  <p class="muted">Do this a few times and the median and best will show here.</p>
+  {{end}}
+  <ul class="list">
+    {{range .Sessions}}
+    <li><a href="/session/{{.ID}}">
+      <span>{{day .StartedAt}}{{if .Scaled}} <span class="chip warn">scaled</span>{{end}}{{if not .Completed}} <span class="chip warn">stopped early</span>{{end}}</span>
+      <span class="muted">{{.Result}}{{if .Effort}} · effort {{deref .Effort}}{{else}} · unrated{{end}}</span>
+    </a></li>
+    {{end}}
+  </ul>
+</section>
+{{end}}

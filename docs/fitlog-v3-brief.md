@@ -1,7 +1,7 @@
 # Fit Log — v3 Brief (draft for discussion)
 
 **Status:** draft, 2026-09-09. Supersedes v2 in scope. v2's data-model principles are carried forward; its non-goals are revised below.
-**Implementation:** stage 1 built 2026-09-09 (core model, GPX + FIT import, seed, CLI). Note the v2 `walk_metrics` table is implemented as `route_metrics`, serving walks and rides, with `source_kind`, `avg_hr` and `max_hr` added.
+**Implementation:** stage 1 built 2026-09-09 (core model, GPX + FIT import, seed, CLI); stage 2 built 2026-09-09 (PWA: home with consistency view, five starter workouts, offline session player, rating, history). Note the v2 `walk_metrics` table is implemented as `route_metrics`, serving walks and rides, with `source_kind`, `avg_hr` and `max_hr` added.
 **Author:** Gio, with Claude
 **Target:** self-hosted PWA on `citadel`, reached over Tailscale and LAN; open source on GitHub
 
@@ -34,6 +34,8 @@ Gio does not currently train. The app's first job is to get someone from nothing
 - **No shame, ever.** The language rule (§6.4, v2 §7) matters more for a beginner than for anyone. A missed fortnight is shown as a gap in the chart, never described in words.
 
 Placeholder names in the v2 brief ("Aphrodite", from Freeletics) are not to be used. Starter sessions get plain descriptive names.
+
+**Equipment on hand:** mat, one elastic band, two adjustable dumbbells (plates 2×0.5, 2×1.25, 2×2.5 kg per dumbbell, so up to about 8.5 kg a hand). No pull-up bar. The starter set and the validator's equipment filter use exactly this list; bar exercises stay in the library but out of any plan until a bar exists.
 
 A personal training system that **answers questions about your own history** and **proposes what to do next**, across walking, Pilates, calisthenics and HIIT, driven by a stated goal and informed by wearable data.
 

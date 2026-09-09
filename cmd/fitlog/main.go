@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,6 +19,7 @@ import (
 	"github.com/giobuilds/sturdy-goggles/internal/importer"
 	"github.com/giobuilds/sturdy-goggles/internal/seed"
 	"github.com/giobuilds/sturdy-goggles/internal/store"
+	"github.com/giobuilds/sturdy-goggles/internal/web"
 )
 
 const usage = `fitlog: a personal training log
@@ -32,8 +34,9 @@ usage: fitlog <command> [flags]
   session list|rate|show            browse and rate sessions
   exercise list [--discipline D]    browse the exercise library
   rederive                          recompute every route session's metrics from stored files
+  serve                             run the web app (FITLOG_LISTEN, default :8080)
 
-Environment: FITLOG_DATA (default ./data), FITLOG_MOVING_SPEED_MPS, FITLOG_ASCENT_THRESHOLD_M.
+Environment: FITLOG_DATA (default ./data), FITLOG_LISTEN, FITLOG_TZ, FITLOG_MOVING_SPEED_MPS, FITLOG_ASCENT_THRESHOLD_M.
 `
 
 type app struct {
@@ -88,6 +91,8 @@ func run(args []string) error {
 		return a.cmdExercise(args[1:])
 	case "rederive":
 		return a.cmdRederive()
+	case "serve":
+		return a.cmdServe()
 	}
 	return fmt.Errorf("unknown command %q\n\n%s", args[0], usage)
 }
@@ -102,11 +107,16 @@ func cmdInit(cfg config.Config) error {
 		return err
 	}
 	defer d.Close()
-	n, err := seed.Load(store.New(d))
+	st := store.New(d)
+	n, err := seed.Load(st)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("initialised %s (%d exercises seeded)\n", dbPath, n)
+	ns, err := seed.LoadStarters(st)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("initialised %s (%d exercises, %d starter workouts)\n", dbPath, n, ns)
 	return nil
 }
 
@@ -115,8 +125,29 @@ func (a *app) cmdSeed() error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("seeded %d exercises\n", n)
+	ns, err := seed.LoadStarters(a.store)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("seeded %d exercises, %d new starter workouts\n", n, ns)
 	return nil
+}
+
+func (a *app) cmdServe() error {
+	loc := time.Local
+	if a.cfg.TZ != "" {
+		l, err := time.LoadLocation(a.cfg.TZ)
+		if err != nil {
+			return fmt.Errorf("FITLOG_TZ: %w", err)
+		}
+		loc = l
+	}
+	srv, err := web.New(a.store, loc)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("fitlog listening on %s (data: %s)\n", a.cfg.Listen, a.cfg.DataDir)
+	return http.ListenAndServe(a.cfg.Listen, srv.Handler())
 }
 
 // ---- protocol --------------------------------------------------------------

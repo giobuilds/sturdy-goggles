@@ -4,8 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## State of the repository
 
-Stage 1 of the build order exists: a Go module with the core data model, GPX and FIT import, an
-exercise seed, and a CLI. No web layer yet. Design lives in two documents for **Fit Log**, a
+Stages 1 and 2 of the build order exist: the core data model, GPX and FIT import, an exercise seed
+with five starter workouts, a CLI, and the server-rendered PWA (home with consistency view, session
+player with offline save, rating, history). No auth, no import endpoint, no Coach yet. Design lives in two documents for **Fit Log**, a
 single-user, open-source personal training system:
 
 - `docs/fitlog-design-brief.md`: the v2 spec (walks + workouts, self-hosted on citadel). Its data-model
@@ -39,6 +40,7 @@ FITLOG_DATA=/tmp/fl ./fitlog init            # creates db + seeds exercises
 FITLOG_DATA=/tmp/fl ./fitlog import fixtures/*.gpx fixtures/*.fit
 FITLOG_DATA=/tmp/fl ./fitlog session list
 FITLOG_DATA=/tmp/fl ./fitlog rederive        # recompute route metrics from stored files
+FITLOG_DATA=/tmp/fl FITLOG_LISTEN=127.0.0.1:8080 ./fitlog serve   # web app
 ```
 
 `fitlog help` lists every command. Effort ratings and notes survive `rederive` by design; a test
@@ -62,7 +64,13 @@ from `fixtures/` into a tracked path without shifting coordinates.
 - `internal/store`: all SQL. `internal/importer`: hashes a file, copies it under
   `<data>/<gpx|fit>/<sha256>.<ext>`, creates the session and metrics, and implements `Rederive`.
 - `internal/seed/exercises.json`: hand-authored, CC0. Regressions are referenced by slug and must
-  appear earlier in the file than the exercise that points at them.
+  appear earlier in the file than the exercise that points at them. `starters.json` defines the shipped
+  beginner workouts; they are created once by name and never overwritten, so user edits survive.
+- `internal/web`: `server.go` holds routes, view models and handlers; `templates/` are html/template
+  pages sharing `layout.html`; `static/` is embedded. `player.js` is the offline session player: it
+  POSTs JSON to `/api/sessions` and queues in localStorage when that fails; `app.js` flushes the queue
+  on every page load. `sw.js` caches the shell; bump its `VERSION` when static files change.
+- Time zone: sessions are stored UTC; weeks start on local Monday in `FITLOG_TZ` (default system).
 
 ## Intended stack (v2 §8, v3 §10)
 

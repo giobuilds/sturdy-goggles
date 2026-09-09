@@ -34,6 +34,8 @@ type Protocol struct {
 	Mode      string // route only: walk | ride | run
 	Name      string
 	Notes     string
+	Rounds    int  // workout only; circuit rounds, at least 1
+	Starter   bool // shipped with the app
 	Archived  bool
 	CreatedAt time.Time
 }
@@ -45,8 +47,11 @@ func (s *Store) CreateProtocol(p Protocol) (int64, error) {
 	if p.Kind == "workout" && p.Mode != "" {
 		return 0, fmt.Errorf("mode applies to route protocols only")
 	}
-	res, err := s.DB.Exec(`INSERT INTO protocols(kind, mode, name, notes, created_at) VALUES (?,?,?,?,?)`,
-		p.Kind, nullStr(p.Mode), p.Name, p.Notes, now())
+	if p.Rounds < 1 {
+		p.Rounds = 1
+	}
+	res, err := s.DB.Exec(`INSERT INTO protocols(kind, mode, name, notes, rounds, starter, created_at) VALUES (?,?,?,?,?,?,?)`,
+		p.Kind, nullStr(p.Mode), p.Name, p.Notes, p.Rounds, boolInt(p.Starter), now())
 	if err != nil {
 		return 0, err
 	}
@@ -54,17 +59,17 @@ func (s *Store) CreateProtocol(p Protocol) (int64, error) {
 }
 
 func (s *Store) ProtocolByName(name string) (*Protocol, error) {
-	row := s.DB.QueryRow(`SELECT id, kind, COALESCE(mode,''), name, notes, archived, created_at FROM protocols WHERE name = ?`, name)
+	row := s.DB.QueryRow(`SELECT id, kind, COALESCE(mode,''), name, notes, rounds, starter, archived, created_at FROM protocols WHERE name = ?`, name)
 	return scanProtocol(row)
 }
 
 func (s *Store) ProtocolByID(id int64) (*Protocol, error) {
-	row := s.DB.QueryRow(`SELECT id, kind, COALESCE(mode,''), name, notes, archived, created_at FROM protocols WHERE id = ?`, id)
+	row := s.DB.QueryRow(`SELECT id, kind, COALESCE(mode,''), name, notes, rounds, starter, archived, created_at FROM protocols WHERE id = ?`, id)
 	return scanProtocol(row)
 }
 
 func (s *Store) ListProtocols(includeArchived bool) ([]Protocol, error) {
-	q := `SELECT id, kind, COALESCE(mode,''), name, notes, archived, created_at FROM protocols`
+	q := `SELECT id, kind, COALESCE(mode,''), name, notes, rounds, starter, archived, created_at FROM protocols`
 	if !includeArchived {
 		q += ` WHERE archived = 0`
 	}
@@ -88,18 +93,127 @@ type scanner interface{ Scan(dest ...any) error }
 
 func scanProtocol(r scanner) (*Protocol, error) {
 	var p Protocol
-	var archived int
+	var starter, archived int
 	var created string
-	err := r.Scan(&p.ID, &p.Kind, &p.Mode, &p.Name, &p.Notes, &archived, &created)
+	err := r.Scan(&p.ID, &p.Kind, &p.Mode, &p.Name, &p.Notes, &p.Rounds, &starter, &archived, &created)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, ErrNotFound
 	}
 	if err != nil {
 		return nil, err
 	}
+	p.Starter = starter == 1
 	p.Archived = archived == 1
 	p.CreatedAt = parseTS(created)
 	return &p, nil
+}
+
+// UpdateProtocol rewrites the editable fields: name, notes, rounds, archived.
+func (s *Store) UpdateProtocol(p Protocol) error {
+	if p.Rounds < 1 {
+		p.Rounds = 1
+	}
+	res, err := s.DB.Exec(`UPDATE protocols SET name=?, notes=?, rounds=?, archived=? WHERE id=?`,
+		p.Name, p.Notes, p.Rounds, boolInt(p.Archived), p.ID)
+	if err != nil {
+		return err
+	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
+// ---- workout items (a workout protocol's prescription) --------------------
+
+type WorkoutItem struct {
+	ID           int64
+	ProtocolID   int64
+	Position     int
+	ExerciseID   *int64
+	ExerciseSlug string // "" when free text
+	Label        string
+	TargetReps   *int
+	TargetSecs   *int
+	RestSecs     int
+	LoadKg       *float64
+}
+
+// Unit is "secs" for timed items, otherwise "reps".
+func (w WorkoutItem) Unit() string {
+	if w.TargetSecs != nil {
+		return "secs"
+	}
+	return "reps"
+}
+
+func (w WorkoutItem) Target() int {
+	if w.TargetSecs != nil {
+		return *w.TargetSecs
+	}
+	if w.TargetReps != nil {
+		return *w.TargetReps
+	}
+	return 0
+}
+
+// ReplaceWorkoutItems sets the full prescription for a workout protocol.
+func (s *Store) ReplaceWorkoutItems(protocolID int64, items []WorkoutItem) error {
+	tx, err := s.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	if _, err := tx.Exec(`DELETE FROM workout_items WHERE protocol_id = ?`, protocolID); err != nil {
+		return err
+	}
+	for i, it := range items {
+		if (it.TargetReps == nil) == (it.TargetSecs == nil) {
+			return fmt.Errorf("item %d (%s): exactly one of reps or secs required", i+1, it.Label)
+		}
+		if _, err := tx.Exec(`INSERT INTO workout_items(protocol_id, position, exercise_id, label, target_reps, target_secs, rest_secs, load_kg)
+			VALUES (?,?,?,?,?,?,?,?)`, protocolID, i+1, it.ExerciseID, it.Label, it.TargetReps, it.TargetSecs, it.RestSecs, it.LoadKg); err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
+}
+
+func (s *Store) WorkoutItems(protocolID int64) ([]WorkoutItem, error) {
+	rows, err := s.DB.Query(`SELECT w.id, w.protocol_id, w.position, w.exercise_id, COALESCE(e.slug,''), w.label,
+		w.target_reps, w.target_secs, w.rest_secs, w.load_kg
+		FROM workout_items w LEFT JOIN exercises e ON e.id = w.exercise_id
+		WHERE w.protocol_id = ? ORDER BY w.position`, protocolID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []WorkoutItem
+	for rows.Next() {
+		var it WorkoutItem
+		var exID sql.NullInt64
+		var reps, secs sql.NullInt64
+		var load sql.NullFloat64
+		if err := rows.Scan(&it.ID, &it.ProtocolID, &it.Position, &exID, &it.ExerciseSlug, &it.Label, &reps, &secs, &it.RestSecs, &load); err != nil {
+			return nil, err
+		}
+		if exID.Valid {
+			it.ExerciseID = &exID.Int64
+		}
+		if reps.Valid {
+			v := int(reps.Int64)
+			it.TargetReps = &v
+		}
+		if secs.Valid {
+			v := int(secs.Int64)
+			it.TargetSecs = &v
+		}
+		if load.Valid {
+			it.LoadKg = &load.Float64
+		}
+		out = append(out, it)
+	}
+	return out, rows.Err()
 }
 
 // ---- sessions --------------------------------------------------------------
@@ -437,6 +551,156 @@ func (s *Store) exerciseTags(id int64) ([]string, error) {
 		tags = append(tags, t)
 	}
 	return tags, rows.Err()
+}
+
+// ---- session exercises (what was actually done) ---------------------------
+
+type SessionExercise struct {
+	SessionID   int64
+	Round       int
+	Position    int
+	ExerciseID  *int64
+	Label       string
+	Unit        string // reps | secs
+	TargetValue *int
+	ActualValue *int
+	LoadKg      *float64
+}
+
+func (s *Store) InsertSessionExercises(sessionID int64, items []SessionExercise) error {
+	tx, err := s.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	for _, it := range items {
+		if _, err := tx.Exec(`INSERT INTO session_exercises(session_id, round, position, exercise_id, label, unit, target_value, actual_value, load_kg)
+			VALUES (?,?,?,?,?,?,?,?,?)`, sessionID, it.Round, it.Position, it.ExerciseID, it.Label, it.Unit, it.TargetValue, it.ActualValue, it.LoadKg); err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
+}
+
+func (s *Store) SessionExercises(sessionID int64) ([]SessionExercise, error) {
+	rows, err := s.DB.Query(`SELECT session_id, round, position, exercise_id, label, unit, target_value, actual_value, load_kg
+		FROM session_exercises WHERE session_id = ? ORDER BY round, position`, sessionID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []SessionExercise
+	for rows.Next() {
+		var it SessionExercise
+		var exID, target, actual sql.NullInt64
+		var load sql.NullFloat64
+		if err := rows.Scan(&it.SessionID, &it.Round, &it.Position, &exID, &it.Label, &it.Unit, &target, &actual, &load); err != nil {
+			return nil, err
+		}
+		if exID.Valid {
+			it.ExerciseID = &exID.Int64
+		}
+		if target.Valid {
+			v := int(target.Int64)
+			it.TargetValue = &v
+		}
+		if actual.Valid {
+			v := int(actual.Int64)
+			it.ActualValue = &v
+		}
+		if load.Valid {
+			it.LoadKg = &load.Float64
+		}
+		out = append(out, it)
+	}
+	return out, rows.Err()
+}
+
+// ---- consistency -----------------------------------------------------------
+
+type WeekCount struct {
+	Start    time.Time // local Monday 00:00
+	Total    int
+	Workouts int
+	Routes   int
+}
+
+// WeeklyCounts returns sessions per local week for the last n weeks, oldest
+// first, the current week last. Every kind counts: consistency is about
+// showing up, not about what was done.
+func (s *Store) WeeklyCounts(loc *time.Location, n int, at time.Time) ([]WeekCount, error) {
+	thisMonday := weekStart(at.In(loc))
+	first := thisMonday.AddDate(0, 0, -7*(n-1))
+	rows, err := s.DB.Query(`SELECT started_at, kind FROM sessions WHERE started_at >= ? ORDER BY started_at`,
+		first.UTC().Format(tsLayout))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	weeks := make([]WeekCount, n)
+	for i := range weeks {
+		weeks[i].Start = first.AddDate(0, 0, 7*i)
+	}
+	for rows.Next() {
+		var started, kind string
+		if err := rows.Scan(&started, &kind); err != nil {
+			return nil, err
+		}
+		t := parseTS(started).In(loc)
+		idx := int(weekStart(t).Sub(first).Hours() / (24 * 7))
+		if idx < 0 || idx >= n {
+			continue
+		}
+		weeks[idx].Total++
+		switch kind {
+		case "workout":
+			weeks[idx].Workouts++
+		case "route":
+			weeks[idx].Routes++
+		}
+	}
+	return weeks, rows.Err()
+}
+
+func weekStart(t time.Time) time.Time {
+	wd := int(t.Weekday()) // Sunday = 0
+	if wd == 0 {
+		wd = 7
+	}
+	d := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+	return d.AddDate(0, 0, -(wd - 1))
+}
+
+func (s *Store) UnratedSessions() ([]Session, error) {
+	rows, err := s.DB.Query(sessionSelect + ` WHERE effort IS NULL ORDER BY started_at DESC LIMIT 20`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Session
+	for rows.Next() {
+		sess, err := scanSession(rows)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, *sess)
+	}
+	return out, rows.Err()
+}
+
+func (s *Store) ExerciseBySlug(slug string) (*Exercise, error) {
+	var e Exercise
+	err := s.DB.QueryRow(`SELECT e.id, e.slug, e.name, e.discipline, e.difficulty, e.equipment, e.unit, COALESCE(r.slug,''), e.source, e.notes
+		FROM exercises e LEFT JOIN exercises r ON r.id = e.regression_of WHERE e.slug = ?`, slug).
+		Scan(&e.ID, &e.Slug, &e.Name, &e.Discipline, &e.Difficulty, &e.Equipment, &e.Unit, &e.RegressionOf, &e.Source, &e.Notes)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, ErrNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	e.Tags, err = s.exerciseTags(e.ID)
+	return &e, err
 }
 
 // ---- helpers ---------------------------------------------------------------

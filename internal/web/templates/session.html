@@ -1,0 +1,40 @@
+{{define "content"}}
+<h1>{{.S.ProtocolName}}</h1>
+<p class="muted">{{day .S.StartedAt}} at {{clock .S.StartedAt}} · {{title .S.Kind}}{{if .S.Mode}} / {{.S.Mode}}{{end}}</p>
+
+<section class="card">
+  {{if .Route}}
+  <p class="stat">{{km .Route.DistanceM}} km <span class="muted">· moving {{hms .Route.MovingS}}</span></p>
+  <p class="muted">elapsed {{hms .Route.ElapsedS}} · ascent {{printf "%.0f" .Route.AscentM}} m{{if .Route.AvgHR}} · HR {{.Route.AvgHR}} avg, {{.Route.MaxHR}} max{{end}}</p>
+  {{end}}
+  {{if .Result}}{{if .Result.TotalSecs}}<p class="stat">{{hms (deref .Result.TotalSecs)}} <span class="muted">total</span></p>{{end}}{{end}}
+  <p>
+    {{if .S.Effort}}Effort <strong>{{deref .S.Effort}}</strong> / 5{{else}}<a class="btn" href="/session/{{.S.ID}}/rate">Rate this session</a>{{end}}
+    {{if .S.Scaled}}<span class="chip warn">scaled</span>{{end}}
+    {{if not .S.Completed}}<span class="chip warn">stopped early</span>{{end}}
+  </p>
+  {{if .S.Note}}<blockquote>{{.S.Note}}</blockquote>{{end}}
+  {{if .S.Effort}}<p class="small"><a href="/session/{{.S.ID}}/rate">Change rating</a></p>{{end}}
+</section>
+
+{{if .Items}}
+<section class="card">
+  <h2>What you did</h2>
+  <table class="table">
+    <thead><tr><th>Round</th><th>Exercise</th><th class="num">Target</th><th class="num">Done</th></tr></thead>
+    <tbody>
+    {{range .Items}}
+    <tr{{if and .ActualValue .TargetValue}}{{if lt (deref .ActualValue) (deref .TargetValue)}} class="under"{{end}}{{end}}>
+      <td>{{.Round}}</td>
+      <td>{{.Label}}{{if .LoadKg}} <span class="muted">{{kg .LoadKg}}</span>{{end}}</td>
+      <td class="num">{{deref .TargetValue}}{{if eq .Unit "secs"}} s{{end}}</td>
+      <td class="num">{{if .ActualValue}}{{deref .ActualValue}}{{if eq .Unit "secs"}} s{{end}}{{else}}–{{end}}</td>
+    </tr>
+    {{end}}
+    </tbody>
+  </table>
+</section>
+{{end}}
+
+{{if .S.ProtocolID}}<p><a href="/protocol/{{deref64 .S.ProtocolID}}">All {{.S.ProtocolName}} sessions</a></p>{{end}}
+{{end}}
