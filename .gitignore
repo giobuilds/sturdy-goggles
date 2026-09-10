@@ -1,0 +1,12 @@
+# Private real-world recordings (contain home GPS coordinates). Tests use them when present.
+/fixtures/
+# Runtime state
+/data/
+*.db
+*.db-wal
+*.db-shm
+# Secrets
+.env
+# Build output
+/fitlog
+/bin/
